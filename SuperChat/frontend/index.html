@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="ru" class="h-full">
+<head>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Super Chat</title>
+    <script src="https://cdn.tailwindcss.com"></script><meta name="color-scheme" content="dark light">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="no-select">
+    <!-- SVG icon sprite (Telegram-like) -->
+    <svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden">
+      <symbol id="ico-chat" viewBox="0 0 24 24">
+        <path d="M20 15a6 6 0 0 1-6 6H8l-4 2 1.4-3.6A6 6 0 0 1 4 15V7a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v8Z"/>
+        <path d="M8 8h8M8 12h6"/>
+      </symbol>
+      <symbol id="ico-comments" viewBox="0 0 24 24">
+        <path d="M7 18H5a3 3 0 0 1-3-3V8a3 3 0 0 1 3-3h9a3 3 0 0 1 3 3v1"/>
+        <path d="M9 10h5M9 13h3"/>
+        <path d="M14 12h5a3 3 0 0 1 3 3v6l-2.8-1.6a2 2 0 0 0-1-.3H14a3 3 0 0 1-3-3v-1a3 3 0 0 1 3-3Z"/>
+      </symbol>
+      <symbol id="ico-plus" viewBox="0 0 24 24">
+        <path d="M12 5v14M5 12h14"/>
+      </symbol>
+      <symbol id="ico-bell" viewBox="0 0 24 24">
+        <path d="M18 8a6 6 0 1 0-12 0c0 7-3 7-3 7h18s-3 0-3-7"/>
+        <path d="M9.5 19a2.5 2.5 0 0 0 5 0"/>
+      </symbol>
+      <symbol id="ico-flag" viewBox="0 0 24 24">
+        <path d="M5 4v16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M5 5h9.2l-1.5 3 1.5 3H5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </symbol>
+            <symbol id="ico-users" viewBox="0 0 24 24">
+        <!-- friends: two people + heart -->
+        <path d="M16.2 11.2a3.2 3.2 0 1 0-3.2-3.2 3.2 3.2 0 0 0 3.2 3.2Z"/>
+        <path d="M7.8 12.2a3 3 0 1 0-3-3 3 3 0 0 0 3 3Z"/>
+        <path d="M3.5 20.5c.4-3 2.9-5.3 5.9-5.3 1.1 0 2.1.3 3 .8"/>
+        <path d="M13.5 15.6c.6-.3 1.3-.4 2-.4 3 0 5.5 2.3 5.9 5.3"/>
+        <path d="M12 14.2c1.2-1.2 3-.9 3.8.3.7 1.1.3 2.6-.7 3.5L12 20.5 8.9 18c-1-.9-1.4-2.4-.7-3.5.8-1.2 2.6-1.5 3.8-.3Z"/>
+      </symbol>
+      <symbol id="ico-news" viewBox="0 0 24 24">
+        <path d="M6 4h13a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a3 3 0 0 1-3-3V6a2 2 0 0 1 2-2h1Z"/>
+        <path d="M7 8h10M7 12h10M7 16h7"/>
+      </symbol>
+      <symbol id="ico-note" viewBox="0 0 24 24">
+        <path d="M7 3h10a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"/>
+        <path d="M8 8h8M8 12h8M8 16h6"/>
+      </symbol>
+      <symbol id="ico-bookmark" viewBox="0 0 24 24">
+        <path d="M6 3h12a1 1 0 0 1 1 1v19l-7-4-7 4V4a1 1 0 0 1 1-1Z"/>
+      </symbol>
+            <symbol id="ico-megaphone" viewBox="0 0 24 24">
+        <!-- channels/groups: broadcast -->
+        <path d="M4 12v2a2 2 0 0 0 2 2h2l6 4V4L8 8H6a2 2 0 0 0-2 2v2Z"/>
+        <path d="M16 9.5h2.2a3.3 3.3 0 0 1 0 5H16"/>
+        <path d="M18.5 7.5c1.7 1.1 2.7 2.8 2.7 4.5s-1 3.4-2.7 4.5"/>
+      </symbol>
+      <symbol id="ico-star" viewBox="0 0 24 24">
+        <path d="M12 2l3.1 6.6 7.3 1.1-5.2 5 1.3 7.2L12 18.9 5.5 22l1.3-7.2-5.2-5 7.3-1.1L12 2Z"/>
+      </symbol>
+      <symbol id="ico-bolt" viewBox="0 0 24 24">
+        <path d="M13 2 5 13h5l-1 9 8-11h-5l1-9Z"/>
+      </symbol>
+      <symbol id="ico-user" viewBox="0 0 24 24">
+        <path d="M20 21c0-4-4-7-8-7s-8 3-8 7"/>
+        <path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z"/>
+      </symbol>
+      <symbol id="ico-settings" viewBox="0 0 24 24">
+        <path d="M12 15.5A3.5 3.5 0 1 0 12 8.5a3.5 3.5 0 0 0 0 7Z"/>
+        <path d="M19.4 15a7.8 7.8 0 0 0 .1-2l2-1.6-2-3.4-2.4 1a8.3 8.3 0 0 0-1.7-1l-.4-2.6H10l-.4 2.6a8.3 8.3 0 0 0-1.7 1l-2.4-1-2 3.4 2 1.6a7.8 7.8 0 0 0 .1 2l-2 1.6 2 3.4 2.4-1a8.3 8.3 0 0 0 1.7 1l.4 2.6h4.4l.4-2.6a8.3 8.3 0 0 0 1.7-1l2.4 1 2-3.4-2-1.6Z"/>
+      </symbol>
+      <symbol id="ico-shield" viewBox="0 0 24 24">
+        <path d="M12 2l8 4v6c0 6-4 10-8 10S4 18 4 12V6l8-4Z"/>
+        <path d="M9 12l2 2 4-5"/>
+      </symbol>
+      <symbol id="ico-door" viewBox="0 0 24 24">
+        <path d="M10 3h9a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-9V3Z"/>
+        <path d="M10 12H3"/>
+        <path d="M6 9l-3 3 3 3"/>
+        <path d="M15 12h.01"/>
+      </symbol>
+      <symbol id="ico-more-vert" viewBox="0 0 24 24">
+        <path d="M12 5.5a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1Zm0 7a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1Zm0 7a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1Z" fill="currentColor" stroke="none"/>
+      </symbol>
+    
+            <symbol id="ico-burger" viewBox="0 0 24 24">
+        <!-- nav burger: rounded, varying lengths to differ from playlist -->
+        <path d="M5 7h14" stroke-linecap="round"/>
+        <path d="M5 12h10" stroke-linecap="round"/>
+        <path d="M5 17h14" stroke-linecap="round"/>
+      </symbol>
+      
+      <symbol id="ico-search" viewBox="0 0 24 24">
+        <path d="M11 19a8 8 0 1 1 0-16 8 8 0 0 1 0 16Z"/>
+        <path d="M21 21l-4.2-4.2"/>
+      </symbol>
+<symbol id="ico-queue" viewBox="0 0 24 24">
+        <path d="M6 7h12"/>
+        <path d="M6 12h12"/>
+        <path d="M6 17h8"/>
+        <path d="M17 16.5v-5l4 2.5-4 2.5z" fill="currentColor" stroke="none"/>
+      </symbol>
+      <symbol id="ico-playlist" viewBox="0 0 24 24">
+        <path d="M6 7h12"/>
+        <path d="M6 12h12"/>
+        <path d="M6 17h12"/>
+        <path d="M10 17v-7a1 1 0 0 1 1.4-.9l5.6 2.5a1 1 0 0 1 0 1.8L12 15.6" />
+      </symbol>
+      <symbol id="ico-emoji" viewBox="0 0 24 24">
+        <path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20z"/>
+        <path d="M8.5 10.2h.01M15.5 10.2h.01" stroke-linecap="round"/>
+        <path d="M8.5 15a4.5 4.5 0 0 0 7 0" />
+      </symbol>
+      <symbol id="ico-gift" viewBox="0 0 24 24">
+        <path d="M20 12v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8"/>
+        <path d="M22 7H2v5h20V7z"/>
+        <path d="M12 22V7"/>
+        <path d="M12 7h4.5a2.5 2.5 0 1 0-2.3-3.4L12 7z"/>
+        <path d="M12 7H7.5a2.5 2.5 0 1 1 2.3-3.4L12 7z"/>
+      </symbol>
+      <symbol id="ico-send" viewBox="0 0 24 24">
+        <path d="M22 2L11 13"/>
+        <path d="M22 2l-7 20-4-9-9-4 20-7z"/>
+      </symbol>
+      <symbol id="ico-mail" viewBox="0 0 24 24">
+        <path d="M4 4h16v16H4V4z"/>
+        <path d="M22 6l-10 7L2 6"/>
+      </symbol>
+      <symbol id="ico-user-plus" viewBox="0 0 24 24">
+        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+        <path d="M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/>
+        <path d="M19 8v6"/>
+        <path d="M16 11h6"/>
+      </symbol>
+      <symbol id="ico-user-minus" viewBox="0 0 24 24">
+        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+        <path d="M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/>
+        <path d="M16 11h6"/>
+      </symbol>
+      <symbol id="ico-clock" viewBox="0 0 24 24">
+        <path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20z"/>
+        <path d="M12 6v6l4 2"/>
+      </symbol>
+      <symbol id="ico-check" viewBox="0 0 24 24">
+        <path d="M20 6 9 17l-5-5"/>
+      </symbol>
+      <symbol id="ico-verified" viewBox="0 0 24 24">
+        <path d="M12 2.6l2.22 1.35 2.57-.15 1.35 2.22 2.22 1.35-.15 2.57L21.4 12l-1.35 2.22.15 2.57-2.22 1.35-1.35 2.22-2.57-.15L12 21.4l-2.22-1.35-2.57.15-1.35-2.22-2.22-1.35.15-2.57L2.6 12l1.35-2.22-.15-2.57 2.22-1.35 1.35-2.22 2.57.15L12 2.6z" fill="currentColor" stroke="none"></path>
+        <path d="M8.2 12.3l2.3 2.3 5.3-5.4" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"></path>
+      </symbol>
+      <symbol id="ico-x" viewBox="0 0 24 24">
+        <path d="M18 6 6 18"/>
+        <path d="M6 6l12 12"/>
+      </symbol>
+      <symbol id="ico-block" viewBox="0 0 24 24">
+        <path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20z"/>
+        <path d="M7.3 7.3l9.4 9.4"/>
+      </symbol>
+      <symbol id="ico-unlock" viewBox="0 0 24 24">
+        <path d="M7 10V8a5 5 0 0 1 9.6-2"/>
+        <path d="M7 10h12v12H7z"/>
+        <path d="M12 14v4"/>
+      </symbol>
+      <symbol id="ico-trash" viewBox="0 0 24 24">
+        <path d="M3 6h18"/>
+        <path d="M8 6V4h8v2"/>
+        <path d="M19 6l-1 16H6L5 6"/>
+        <path d="M10 11v6"/>
+        <path d="M14 11v6"/>
+      </symbol>
+</svg>
+
+    <div id="app" class="flex flex-col h-full ios-fixed-fix">
+        <aside id="desktop-sidebar" class="tg-desktop-sidebar hidden" aria-label="Навигация (ПК)">
+            <div class="tg-side-logo">SC</div>
+            <div class="tg-side-items">
+                <button class="tg-side-item active" data-nav="chats_list" title="Чаты">
+                    <span class="tg-side-ico"><svg class="tg-svg"><use href="#ico-chat"></use></svg></span>
+                    <span class="tg-side-txt">Чаты</span>
+                </button>
+                <button class="tg-side-item" data-nav="add_chat" title="Новый чат">
+                    <span class="tg-side-ico"><svg class="tg-svg"><use href="#ico-plus"></use></svg></span>
+                    <span class="tg-side-txt">Новый</span>
+                </button>
+                <button class="tg-side-item relative" data-nav="notifications" title="Уведомления">
+                    <span class="tg-side-ico"><svg class="tg-svg"><use href="#ico-bell"></use></svg></span>
+                    <span class="tg-side-txt">Уведом.</span>
+                    <span id="desktop-notification-badge" class="tg-side-badge hidden">0</span>
+                </button>
+                <button class="tg-side-item" data-nav="friends" title="Друзья">
+                    <span class="tg-side-ico"><svg class="tg-svg"><use href="#ico-users"></use></svg></span>
+                    <span class="tg-side-txt">Друзья</span>
+                </button>
+                <button class="tg-side-item" data-nav="news" title="Новости">
+                    <span class="tg-side-ico"><svg class="tg-svg"><use href="#ico-news"></use></svg></span>
+                    <span class="tg-side-txt">Новости</span>
+                </button>
+                <button class="tg-side-item pc-only" data-nav="notes" title="Заметки (локально)">
+                    <span class="tg-side-ico"><svg class="tg-svg"><use href="#ico-note"></use></svg></span>
+                    <span class="tg-side-txt">Заметки</span>
+                </button>
+                
+                <button class="tg-side-item pc-only" data-nav="favorites" title="Избранные сообщения">
+                    <span class="tg-side-ico"><svg class="tg-svg"><use href="#ico-bookmark"></use></svg></span>
+                    <span class="tg-side-txt">Избран.</span>
+                </button>
+<button class="tg-side-item" data-nav="channels_groups" title="Каналы/Группы">
+                    <span class="tg-side-ico"><svg class="tg-svg"><use href="#ico-megaphone"></use></svg></span>
+                    <span class="tg-side-txt">Каналы/Гр.</span>
+                </button>
+                <button class="tg-side-item" data-nav="shop" title="Магазин">
+                    <span class="tg-side-ico"><svg class="tg-svg"><use href="#ico-star"></use></svg></span>
+                    <span class="tg-side-txt">Магазин</span>
+                </button>
+                <button class="tg-side-item" data-nav="profile" title="Профиль">
+                    <span class="tg-side-ico"><svg class="tg-svg"><use href="#ico-user"></use></svg></span>
+                    <span class="tg-side-txt">Профиль</span>
+                </button>
+                <button class="tg-side-item" data-nav="settings" title="Настройки">
+                    <span class="tg-side-ico"><svg class="tg-svg"><use href="#ico-settings"></use></svg></span>
+                    <span class="tg-side-txt">Настр.</span>
+                </button>
+                <button class="tg-side-item pc-only" data-nav="admin_panel" title="Админ-панель">
+                    <span class="tg-side-ico"><svg class="tg-svg"><use href="#ico-shield"></use></svg></span>
+                    <span class="tg-side-txt">Админка</span>
+                </button>
+            </div>
+        </aside>
+
+        <div id="app-main" class="flex flex-col flex-1 min-w-0">
+            <div id="tg-topbar" class="hidden" aria-label="Навигация (моб.)">
+                <div class="tg-topbar-inner">
+                    <button id="tg-nav-btn" class="tg-topbar-btn tg-topbar-btn--burger" aria-label="Меню"><svg class="tg-svg tg-svg--burger" aria-hidden="true"><use href="#ico-burger"></use></svg></button>
+                    <div id="tg-title">Super Chat</div>
+                    <!-- Search button removed (requested): keeps topbar cleaner on mobile -->
+                </div>
+            </div>
+
+        <div id="screen-container" class="flex-grow better-scroll"></div>
+
+        <div id="global-player" class="global-player hidden" aria-label="Плеер">
+            <div class="global-player-inner tg-tinted-surface">
+                <div class="gp-cover" aria-hidden="true">
+                    <img id="global-player-cover" src="default-avatar.png" alt="">
+                </div>
+                <button id="global-player-toggle" class="gp-btn gp-btn--main" type="button" aria-label="Пауза/воспроизведение"></button>
+                <div class="gp-meta min-w-0">
+                    <div id="global-player-title" class="gp-title truncate">Музыка</div>
+                    <div class="gp-row">
+                        <input id="global-player-seek" type="range" min="0" max="1000" value="0" class="gp-seek" aria-label="Перемотка">
+                        <span id="global-player-time" class="gp-time">0:00</span>
+                    </div>
+                </div>
+                <button id="global-player-close" class="gp-btn gp-btn--close" type="button" aria-label="Остановить"></button>
+                <audio id="global-audio" preload="none"></audio>
+            </div>
+        </div>
+
+        <!-- Expanded / fullscreen player overlay -->
+        <div id="player-overlay" class="player-overlay hidden" aria-label="Плеер (развернутый)" role="dialog" aria-modal="true">
+            <div id="player-panel" class="player-panel tg-tinted-surface">
+                <div class="player-header">
+                    <button id="player-overlay-close" class="player-hbtn" type="button" aria-label="Свернуть"></button>
+                    <div class="player-head-title">
+                        <div id="player-overlay-title-mini" class="t">Музыка</div>
+                        <div id="player-overlay-sub" class="s">Очередь: 0</div>
+                    </div>
+                    <button id="player-overlay-fullscreen" class="player-hbtn" type="button" aria-label="Полноэкранно"></button>
+                </div>
+                <div class="player-body">
+                    <div id="player-overlay-title" class="player-big-title">Музыка</div>
+
+                    <div class="player-cover-wrap">
+                        <div class="player-cover">
+                            <img id="player-overlay-cover" src="default-avatar.png" alt="">
+                            <div class="player-cover-glow" aria-hidden="true"></div>
+                        </div>
+                    </div>
+
+                    <div class="player-progress">
+                        <input id="player-overlay-seek" type="range" min="0" max="1000" value="0" class="gp-seek" aria-label="Перемотка (плеер)">
+                        <div class="player-times">
+                            <span id="player-overlay-cur">0:00</span>
+                            <span id="player-overlay-dur">0:00</span>
+                        </div>
+                    </div>
+
+                    <div class="player-controls">
+                        <button id="player-overlay-prev" class="pc-btn" type="button" aria-label="Предыдущий"></button>
+                        <button id="player-overlay-play" class="pc-btn pc-btn--main" type="button" aria-label="Пауза/воспроизведение"></button>
+                        <button id="player-overlay-next" class="pc-btn" type="button" aria-label="Следующий"></button>
+                    </div>
+
+                    <div class="player-controls" style="margin-top:10px; gap:10px;">
+                        <button id="player-overlay-repeat" class="pc-btn" type="button" aria-label="Повтор"></button>
+                        <button id="player-overlay-shuffle" class="pc-btn" type="button" aria-label="Перемешать"></button>
+                        <button id="player-overlay-add" class="pc-btn" type="button" aria-label="Добавить в плейлист"></button>
+                        <button id="player-overlay-favorite" class="pc-btn" type="button" aria-label="В любимые"></button>
+                        <button id="player-overlay-share-track" class="pc-btn" type="button" aria-label="Поделиться треком"></button>
+                    </div>
+
+                    <div class="player-vol">
+                        <span class="text-sm" style="color:rgba(255,255,255,0.78);">🔊</span>
+                        <input id="player-overlay-volume" type="range" min="0" max="100" value="100" class="gp-seek" aria-label="Громкость">
+                    </div>
+
+                    <div class="player-tabs">
+                        <button id="player-tab-queue" class="ptab is-active" type="button"><svg class="tg-svg" aria-hidden="true"><use href="#ico-queue"></use></svg><span>Очередь</span></button>
+                        <button id="player-tab-playlists" class="ptab" type="button"><svg class="tg-svg" aria-hidden="true"><use href="#ico-playlist"></use></svg><span>Коллекция</span></button>
+                    </div>
+
+                    <div id="player-tab-content-queue">
+                        <div id="player-queue" class="player-list"></div>
+                        <div id="player-queue-empty" class="player-empty hidden">Очередь пуста</div>
+                    </div>
+
+                    <div id="player-tab-content-playlists" class="hidden">
+                        <div class="flex items-center justify-between mt-2">
+                            <div class="text-sm font-extrabold" style="color:rgba(255,255,255,0.92);">Мои плейлисты</div>
+                            <button id="player-create-playlist" type="button" class="player-hbtn" aria-label="Создать плейлист"></button>
+                        </div>
+                        <div id="player-playlists" class="player-list"></div>
+                        <div id="player-playlists-empty" class="player-empty hidden">Плейлистов пока нет</div>
+                        <div class="mt-4">
+                            <div class="text-sm font-bold text-white">Поиск SoundCloud</div>
+                            <div class="player-search-row mt-2">
+                                <input id="player-sc-search-input" type="search" class="player-search-input" placeholder="Название трека, артист, ремикс…" autocomplete="off">
+                                <button id="player-sc-search-btn" type="button" class="player-search-btn">Найти</button>
+                            </div>
+                            <div id="player-sc-search-status" class="player-search-status"></div>
+                            <div id="player-sc-search-results" class="player-rec-list"></div>
+                        </div>
+                        <div class="mt-4">
+                            <div class="text-sm font-bold text-white">Моя волна</div>
+                            <div class="text-xs text-slate-400 mt-1">Смешивает локальные треки, рекомендации SoundCloud и быстрые переходы к внешним сервисам.</div>
+                            <div id="player-sc-recommendations" class="player-rec-list"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+            <button id="tg-fab" aria-label="Новый чат">✎</button>
+
+        <div id="tab-bar" class="tab-bar transition-all duration-300 flex-shrink-0 ios-fixed-fix" style="display: none;">
+            <div class="flex justify-start gap-1 overflow-x-auto px-2 py-1.5" style="scrollbar-width: none; -ms-overflow-style: none;">
+                
+                <button data-tab="chats_list" 
+                        class="tab-button flex flex-col items-center px-3 py-2 rounded-2xl transition-all duration-200 
+                            hover:bg-white/10 active:scale-95 whitespace-nowrap relative 
+                            text-slate-300 active-tab 
+                            bg-gradient-to-br from-sky-500/30 to-blue-500/30 shadow-md">
+                    <span class="text-xl mb-0.5">💬</span>
+                    <span class="text-[0.7rem] font-medium">Чаты</span>
+                </button>
+
+                <button data-tab="add_chat" 
+                        class="tab-button flex flex-col items-center px-3 py-2 rounded-2xl transition-all duration-200 
+                            hover:bg-white/10 active:scale-95 whitespace-nowrap relative 
+                            text-slate-300">
+                    <span class="text-xl mb-0.5">➕</span>
+                    <span class="text-[0.7rem] font-medium">Новый</span>
+                </button>
+
+                <button data-tab="notifications" 
+                        class="tab-button flex flex-col items-center px-3 py-2 rounded-2xl transition-all duration-200 
+                            hover:bg-white/10 active:scale-95 whitespace-nowrap relative 
+                            text-slate-300">
+                    <span class="text-xl mb-0.5">🔔</span>
+                    <span class="text-[0.7rem] font-medium">Уведом.</span>
+                    <span id="notification-badge" class="notification-badge hidden">0</span>
+                </button>
+
+                <button data-tab="news" 
+                        class="tab-button flex flex-col items-center px-3 py-2 rounded-2xl transition-all duration-200 
+                            hover:bg-white/10 active:scale-95 whitespace-nowrap relative 
+                            text-slate-300">
+                    <span class="text-xl mb-0.5">📰</span>
+                    <span class="text-[0.7rem] font-medium">Новости</span>
+                </button>
+
+                <button data-tab="channels_groups" 
+                        class="tab-button flex flex-col items-center px-3 py-2 rounded-2xl transition-all duration-200 
+                            hover:bg-white/10 active:scale-95 whitespace-nowrap relative 
+                            text-slate-300">
+                    <span class="text-xl mb-0.5">📢</span>
+                    <span class="text-[0.7rem] font-medium">Каналы</span>
+                </button>
+
+                <button data-tab="shop" 
+                        class="tab-button flex flex-col items-center px-3 py-2 rounded-2xl transition-all duration-200 
+                            hover:bg-white/10 active:scale-95 whitespace-nowrap relative 
+                            text-slate-300">
+                    <span class="text-xl mb-0.5">⭐</span>
+                    <span class="text-[0.7rem] font-medium">Магазин</span>
+                </button>
+
+
+                <button data-tab="notes" 
+                        class="tab-button flex flex-col items-center px-3 py-2 rounded-2xl transition-all duration-200 
+                            hover:bg-white/10 active:scale-95 whitespace-nowrap relative 
+                            text-slate-300">
+                    <span class="text-xl mb-0.5">📝</span>
+                    <span class="text-[0.7rem] font-medium">Заметки</span>
+                </button>
+
+                <button data-tab="profile"  
+                        class="tab-button flex flex-col items-center px-3 py-2 rounded-2xl transition-all duration-200 
+                            hover:bg-white/10 active:scale-95 whitespace-nowrap relative 
+                            text-slate-300">
+                    <span class="text-xl mb-0.5">👤</span>
+                    <span class="text-[0.7rem] font-medium">Профиль</span>
+                </button>
+
+            </div>
+        
+        </div>
+    </div>
+</div>
+
+    <div id="tg-drawer-overlay" onclick="closeDrawer()" aria-hidden="true"></div>
+    <nav id="tg-drawer" aria-label="Меню">
+        <div class="tg-drawer-header">
+            <!-- Кликабельный блок профиля (аватар/имя) → экран "Профиль" -->
+            <div class="tg-drawer-profile" data-nav="profile" role="button" tabindex="0" aria-label="Открыть профиль">
+                <img id="tg-drawer-avatar" src="/default-avatar.png" alt="Аватар">
+                <div class="min-w-0">
+                    <div id="tg-drawer-name" class="tg-drawer-name">Гость</div>
+                    <div id="tg-drawer-username" class="tg-drawer-username">@username</div>
+                </div>
+                <div id="tg-drawer-stars" class="tg-drawer-stars hidden">⚡ 0</div>
+            </div>
+        </div>
+
+        <div class="tg-drawer-items">
+            <button class="tg-drawer-item active" data-nav="chats_list">
+                <span class="tg-ico"><svg class="tg-svg"><use href="#ico-chat"></use></svg></span>
+                <span>Чаты</span>
+            </button>
+            <button class="tg-drawer-item" data-nav="add_chat">
+                <span class="tg-ico"><svg class="tg-svg"><use href="#ico-plus"></use></svg></span>
+                <span>Новый чат</span>
+            </button>
+            <button class="tg-drawer-item" data-nav="notifications">
+                <span class="tg-ico"><svg class="tg-svg"><use href="#ico-bell"></use></svg></span>
+                <span>Уведомления</span>
+                <span id="tg-notification-badge" class="tg-badge hidden">0</span>
+            </button>
+            <button class="tg-drawer-item" data-nav="friends">
+                <span class="tg-ico"><svg class="tg-svg"><use href="#ico-users"></use></svg></span>
+                <span>Друзья</span>
+            </button>
+            <button class="tg-drawer-item" data-nav="news">
+                <span class="tg-ico"><svg class="tg-svg"><use href="#ico-news"></use></svg></span>
+                <span>Новости</span>
+            </button>
+            <button class="tg-drawer-item" data-nav="channels_groups">
+                <span class="tg-ico"><svg class="tg-svg"><use href="#ico-megaphone"></use></svg></span>
+                <span>Каналы / группы</span>
+            </button>
+            <button class="tg-drawer-item" data-nav="shop">
+                <span class="tg-ico"><svg class="tg-svg"><use href="#ico-star"></use></svg></span>
+                <span>Магазин</span>
+            </button>
+            <button class="tg-drawer-item" data-nav="notes">
+                <span class="tg-ico"><svg class="tg-svg"><use href="#ico-note"></use></svg></span>
+                <span>Заметки</span>
+            </button>
+            
+            <button class="tg-drawer-item" data-nav="favorites">
+                <span class="tg-ico"><svg class="tg-svg"><use href="#ico-bookmark"></use></svg></span>
+                <span>Избранное</span>
+            </button>
+<button class="tg-drawer-item" data-nav="profile">
+                <span class="tg-ico"><svg class="tg-svg"><use href="#ico-user"></use></svg></span>
+                <span>Профиль</span>
+            </button>
+            <button class="tg-drawer-item" data-nav="settings">
+                <span class="tg-ico"><svg class="tg-svg"><use href="#ico-settings"></use></svg></span>
+                <span>Настройки</span>
+            </button>
+            <button class="tg-drawer-item" data-nav="admin_panel">
+                <span class="tg-ico"><svg class="tg-svg"><use href="#ico-shield"></use></svg></span>
+                <span>Админ-панель</span>
+            </button>
+
+            <div class="my-2 border-t border-white/10"></div>
+
+            <button class="tg-drawer-item" onclick="logout()">
+                <span class="tg-ico"><svg class="tg-svg"><use href="#ico-door"></use></svg></span>
+                <span>Выйти</span>
+            </button>
+        </div>
+    </nav>
+
+    <div id="custom-modal" class="modal hidden">
+        <div class="modal-content text-center">
+            <h3 id="modal-title" class="text-xl font-bold mb-3 gradient-text">Заголовок</h3>
+            <p id="modal-message" class="mb-5 text-slate-300">Сообщение</p>
+            <button id="modal-ok-button" class="primary-button w-full">ОК</button>
+            <div id="modal-confirm-buttons" class="flex justify-between hidden mt-3">
+                <button id="modal-cancel-button" class="secondary-button w-[48%]">Отмена</button>
+                <button id="modal-confirm-button" class="primary-button w-[48%] bg-red-600 hover:bg-red-700">Подтвердить</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- QR scan modal (mobile settings) -->
+    <div id="qr-scan-modal" class="modal hidden">
+        <div class="modal-content text-left" style="max-width:420px;">
+            <div class="flex items-start justify-between gap-3">
+                <div>
+                    <h3 class="text-xl font-bold mb-1 gradient-text">Сканировать QR</h3>
+                    <p class="text-sm text-slate-400">Наведите камеру на QR-код, который показан на ПК.</p>
+                </div>
+                <button type="button" class="text-2xl leading-none text-slate-400 hover:text-primary" onclick="closeQrScanOverlay()" aria-label="Закрыть">&times;</button>
+            </div>
+
+            <div class="mt-3">
+                <video id="qr-scan-video" playsinline muted style="width:100%; aspect-ratio: 1 / 1; background:#000; border-radius:16px; object-fit:cover;"></video>
+                <div id="qr-scan-status" class="text-xs text-slate-400 mt-2">Запрос камеры…</div>
+                <button id="qr-scan-permission-btn" type="button" class="primary-button w-full mt-2" onclick="requestQrCameraPermission()">📷 Разрешить камеру</button>
+            </div>
+
+            <div class="flex gap-2 mt-4">
+                <button type="button" class="secondary-button w-1/2" onclick="closeQrScanOverlay()">Закрыть</button>
+                <button type="button" class="primary-button w-1/2" onclick="restartQrScan()">Повторить</button>
+            </div>
+
+            <div class="mt-4 border-t border-white/10 pt-3">
+                <div class="text-sm text-slate-300 font-semibold mb-2">Если сканер не работает</div>
+                <div class="text-xs text-slate-400 mb-2">Можно сфотографировать QR или вставить токен/ссылку вручную.</div>
+                <button type="button" class="secondary-button w-full" onclick="pickQrFromPhoto()">📸 Сфотографировать QR</button>
+                <input id="qr-scan-manual" type="text" class="input-field" placeholder="Сессионный ключ" autocapitalize="none" autocomplete="off" spellcheck="false">
+                <button type="button" class="primary-button w-full mt-2" onclick="approveQrTokenManual()">Подтвердить вход</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Center gift toast (used for send confirmation + receive notification) -->
+    <div id="gift-toast" class="gift-toast hidden" aria-live="polite" aria-atomic="true">
+        <div class="gift-toast-card" role="status">
+            <div id="gift-toast-preview" class="gift-toast-preview"><div id="gift-toast-emoji" class="gift-toast-emoji">🎁</div></div>
+            <div id="gift-toast-title" class="gift-toast-title">Подарок</div>
+            <div id="gift-toast-text" class="gift-toast-text">...</div>
+            <div class="gift-toast-hint">Нажмите, чтобы закрыть</div>
+        </div>
+    </div>
+    
+    <div id="user-profile-modal" class="modal hidden">
+	        <div class="modal-content text-center">
+	            <div id="modal-profile-banner" class="profile-banner mb-3">
+	                <button id="profile-close-btn" class="profile-banner-close" type="button" aria-label="Закрыть профиль" onclick="document.getElementById('user-profile-modal').classList.add('hidden')">&times;</button>
+	            </div>
+            <img id="modal-profile-avatar" src="" alt="Аватар" class="avatar-preview profile-avatar-over mx-auto mb-3">
+            <h3 id="modal-profile-name" class="text-2xl font-bold text-white">Имя Пользователя</h3>
+            <p id="modal-profile-username" class="text-slate-400 mb-2">@username</p>
+            <div id="modal-profile-presence" class="user-presence-line mb-3"></div>
+            <p id="modal-profile-bio" class="text-l font-bold text-white">Описание профиля</p>
+            
+            <h4 class="text-xl font-semibold mt-6 mb-3 border-b border-slate-700 pb-1">Подарки</h4>
+            <div id="modal-profile-gifts" class="grid grid-cols-4 gap-4 p-3 bg-slate-800 rounded-xl min-h-[50px]">
+            </div>
+        </div>
+    </div>
+
+    <div id="channel-settings-modal" class="modal hidden">
+        <div class="modal-content text-left max-w-md max-h-[80vh] overflow-y-auto">
+            <button class="absolute top-2 right-4 text-3xl font-light text-slate-500 hover:text-slate-300 transition-colors" onclick="document.getElementById('channel-settings-modal').classList.add('hidden')">&times;</button>
+            <h3 id="channel-settings-title" class="text-xl font-bold mb-4 gradient-text">Настройки канала</h3>
+            
+            <div id="channel-settings-content">
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+
+    <script src="password-toggle.js"></script>
+
+    <script src="admin-panel-v20.js"></script>
+
+    <script src="admin-panel-v3.js"></script>
+
+    <script src="admin-panel-v25.js"></script>
+
+    <script src="admin-scroll-fix.js"></script>
+
+<script>
+(function(){
+  function ensureBotUiStyle(){
+    if(document.getElementById('bot-inline-ui-style')) return;
+    const st=document.createElement('style');
+    st.id='bot-inline-ui-style';
+    st.textContent=`
+      .bot-inline-row{display:flex;justify-content:flex-start;margin:10px 0 14px;}
+      .bot-inline-wrap{display:flex;gap:10px;max-width:85%;width:100%;align-items:flex-start;}
+      .bot-inline-avatar{width:38px;height:38px;border-radius:999px;object-fit:cover;flex:0 0 38px;}
+      .bot-inline-bubble{background:linear-gradient(180deg,rgba(30,41,59,.96),rgba(15,23,42,.98));border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:14px;color:#e2e8f0;box-shadow:0 14px 32px rgba(2,6,23,.22);width:100%;}
+      .bot-inline-buttons{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:10px;}
+      .bot-inline-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:12px 14px;border-radius:14px;border:1px solid rgba(96,165,250,.28);background:rgba(30,64,175,.18);color:#fff;font-weight:800;cursor:pointer;transition:transform .15s ease,background .15s ease,border-color .15s ease;}
+      .bot-inline-btn:hover{background:rgba(37,99,235,.28);border-color:rgba(147,197,253,.5);}
+      .bot-inline-btn:active{transform:scale(.98);}
+      .bot-inline-btn.secondary{background:rgba(15,23,42,.72);border-color:rgba(255,255,255,.08);color:#dbeafe;}
+      .bot-inline-head{font-weight:900;color:#fff;margin-bottom:6px;font-size:15px;}
+      .bot-inline-copy{font-size:13px;line-height:1.5;color:#cbd5e1;}
+      .bot-inline-form{display:grid;gap:10px;margin-top:10px;}
+      .bot-inline-form label{font-size:13px;color:#cbd5e1;font-weight:700;display:block;}
+      .bot-inline-form input,.bot-inline-form select,.bot-inline-form textarea{width:100%;margin-top:6px;background:#020617;border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:12px;color:#fff;outline:none;}
+      .bot-inline-card{border:1px solid rgba(255,255,255,.08);background:rgba(2,6,23,.4);border-radius:14px;padding:12px;}
+      .bot-inline-status{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:#111827;border:1px solid rgba(255,255,255,.08);font-size:12px;color:#dbeafe;font-weight:800;}
+      .bot-inline-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+      .bot-inline-actions .bot-inline-btn{flex:1 1 180px;}
+      .bot-inline-bubble .tg-svg{width:16px;height:16px;display:block;}
+      @media (max-width:640px){.bot-inline-buttons{grid-template-columns:1fr;}.bot-inline-wrap{max-width:100%;}.bot-inline-actions .bot-inline-btn{flex:1 1 100%;}}
+    `;
+    document.head.appendChild(st);
+  }
+  const esc=(v)=>String(v==null?'':v).replace(/[&<>"']/g,s=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
+  const jsq=(v)=>String(v==null?'':v).split('\\').join('\\\\').split("'").join("\\'").replace(/\r?\n/g,' ');
+  function icon(name){return `<svg class="tg-svg" aria-hidden="true"><use href="#${name}"></use></svg>`;}
+  function vBtn(label, onclick, secondary){ return `<button type="button" class="bot-inline-btn ${secondary?'secondary':''}" onclick="${onclick}">${label}</button>`; }
+  function currentChatIsVerification(){ return String(window.currentChatId||'').startsWith('verification_bot_'); }
+  function currentChatIsSecurity(){ return String(window.currentChatId||'').startsWith('security_bot_'); }
+  function cleanupBotMenus(){
+    const cv=document.getElementById('chat_view'); if(!cv) return;
+    cv.querySelectorAll('#verification-bot-panel,.verification-bot-open,#verification-bot-panel-body').forEach(el=>el.remove());
+    const top=cv.querySelector('.ios-topbar');
+    if(top && currentChatIsVerification()){
+      Array.from(top.querySelectorAll('button')).forEach(btn=>{ const t=(btn.textContent||'').trim(); if(t==='Меню' || t==='Сессии') btn.remove(); });
+    }
+    if(top && currentChatIsSecurity()){
+      Array.from(top.querySelectorAll('button')).forEach(btn=>{ const t=(btn.textContent||'').trim(); if(t==='Сессии') btn.remove(); });
+    }
+    cv.querySelectorAll('.p-4.bg-slate-800.text-center').forEach(el=>el.remove());
+  }
+  function botWorkspace(){
+    ensureBotUiStyle(); cleanupBotMenus();
+    const list=document.getElementById('message-list'); if(!list) return null;
+    let row=document.getElementById('bot-inline-row');
+    if(!row){
+      row=document.createElement('div'); row.id='bot-inline-row'; row.className='bot-inline-row';
+      row.innerHTML=`<div class="bot-inline-wrap"><img src="/bot_avatar.png" alt="bot" class="bot-inline-avatar"><div id="bot-inline-bubble" class="bot-inline-bubble"></div></div>`;
+      list.appendChild(row);
+    }
+    return row.querySelector('#bot-inline-bubble');
+  }
+  function scrollBotWorkspace(){ try{ document.getElementById('bot-inline-row')?.scrollIntoView({block:'end',behavior:'smooth'}); }catch(e){} }
+  function removeBotMsgMenus(){
+    const list=document.getElementById('message-list'); if(!list) return;
+    list.querySelectorAll('.message-with-avatar, .flex.justify-start, .flex.justify-end').forEach(row=>{
+      const avatar=row.querySelector('img.avatar');
+      const isBot = avatar && /bot_avatar\.png(?:$|\?)/.test(avatar.getAttribute('src')||'');
+      if(!isBot) return;
+      row.querySelectorAll('.message-bubble[data-action="msg-menu"]').forEach(b=>{ b.removeAttribute('data-action'); b.style.cursor='default'; });
+    });
+  }
+  async function loadMyRequests(){ try{ const res=await adminApi('get_my_verification_requests'); return (res&&res.success&&Array.isArray(res.items))?res.items:[]; }catch(e){ return []; } }
+  function verificationStatus(status){ return status==='approved' ? 'Одобрено' : status==='rejected' ? 'Отклонено' : 'На рассмотрении'; }
+  function verificationHome(){
+    const host=botWorkspace(); if(!host) return;
+    host.innerHTML=`<div class="bot-inline-head">Super Verification</div><div class="bot-inline-buttons">${vBtn(icon('ico-user')+' <span>Профиль</span>',"openVerificationInlineForm('profile')")}${vBtn(icon('ico-megaphone')+' <span>Канал</span>',"openVerificationInlineForm('channel')")}${vBtn(icon('ico-check')+' <span>Мои заявки</span>','showVerificationInlineRequests()',true)}${vBtn(icon('ico-settings')+' <span>Требования</span>','showVerificationInlineRequirements()',true)}</div>`;
+    scrollBotWorkspace();
+  }
+  window.showVerificationInlineRequirements=function(){ const host=botWorkspace(); if(!host) return; host.innerHTML=`<div class="bot-inline-head">Требования для верификации</div><div class="bot-inline-copy">Для профиля: username на сайте должен совпадать с username в Telegram.<br><br>Для канала: на сайте нужно минимум <b>50+</b> подписчиков, а в Telegram минимум <b>100+</b> подписчиков. Прикрепите доказательства и укажите Telegram username канала.</div><div class="bot-inline-actions">${vBtn(icon('ico-x')+' <span>Назад</span>','verificationHome()',true)}</div>`; scrollBotWorkspace(); };
+  window.showVerificationInlineRequests=async function(){ const host=botWorkspace(); if(!host) return; const items=await loadMyRequests(); host.innerHTML=`<div class="bot-inline-head">Мои заявки</div>` + (items.length?items.map(item=>`<div class="bot-inline-card" style="margin-top:10px"><div style="display:flex;justify-content:space-between;gap:10px;align-items:center"><div style="font-weight:800;color:#fff">${item.type==='channel' ? 'Канал' + (item.channel_name? ' · '+esc(item.channel_name):'') : 'Профиль'}</div><span class="bot-inline-status">${esc(verificationStatus(item.status||'pending'))}</span></div><div class="bot-inline-copy" style="margin-top:8px">Telegram: @${esc(item.telegram_username||'не указан')}<br>${esc(item.comment||'Без комментария')}${item.admin_comment?'<br><br><b>Комментарий администрации:</b> '+esc(item.admin_comment):''}</div></div>`).join(''):`<div class="bot-inline-card" style="margin-top:10px"><div class="bot-inline-copy">У вас пока нет заявок.</div></div>`) + `<div class="bot-inline-actions">${vBtn(icon('ico-x')+' <span>Назад</span>','verificationHome()',true)}</div>`; scrollBotWorkspace(); };
+  window.openVerificationInlineForm=function(type){ const host=botWorkspace(); if(!host) return; const owned=(Array.isArray(window.chatsData)?window.chatsData.filter(c=>String(c.type)==='channel' && c.is_admin):[]); const options=owned.map(ch=>`<option value="${esc(ch.id)}">${esc(ch.name)} @${esc(ch.username||'')}</option>`).join(''); host.innerHTML=`<div class="bot-inline-head">Новая заявка</div><div class="bot-inline-form"><label>Что верифицировать<select id="vb-type-inline-real" onchange="document.getElementById('vb-channel-wrap-real').classList.toggle('hidden', this.value!=='channel')"><option value="profile" ${type==='profile'?'selected':''}>Профиль</option><option value="channel" ${type==='channel'?'selected':''}>Канал</option></select></label><div id="vb-channel-wrap-real" class="${type==='channel'?'':'hidden'}"><label>Канал<select id="vb-channel-real"><option value="">Выберите канал</option>${options}</select></label></div><label>Username в Telegram<input id="vb-tg-username-real" placeholder="например mychannel"></label><label>Количество подписчиков в Telegram<input id="vb-tg-subs-real" type="number" min="0" placeholder="например 120"></label><label>Комментарий<textarea id="vb-comment-real" rows="4" placeholder="Опишите доказательства и контекст"></textarea></label><label>Доказательство<input id="vb-file-real" type="file" accept="image/*,.pdf"></label></div><div class="bot-inline-actions">${vBtn(icon('ico-check')+' <span>Отправить заявку</span>','submitVerificationInlineReal()')}${vBtn(icon('ico-x')+' <span>Назад</span>','verificationHome()',true)}</div>`; scrollBotWorkspace(); };
+  window.submitVerificationInlineReal=async function(){ const fd=new FormData(); const type=document.getElementById('vb-type-inline-real')?.value||'profile'; fd.append('request_type', type); fd.append('channel_id', document.getElementById('vb-channel-real')?.value||''); fd.append('telegram_username', document.getElementById('vb-tg-username-real')?.value||''); fd.append('telegram_subscribers', document.getElementById('vb-tg-subs-real')?.value||'0'); fd.append('comment', document.getElementById('vb-comment-real')?.value||''); const f=document.getElementById('vb-file-real')?.files?.[0]; if(f) fd.append('evidence_file', f); const res=await adminApi('submit_verification_request', fd, true); const host=botWorkspace(); if(!res||!res.success){ if(host) host.innerHTML=`<div class="bot-inline-head">Не удалось отправить заявку</div><div class="bot-inline-copy">${esc((res&&res.error)||'Попробуйте ещё раз.')}</div><div class="bot-inline-actions">${vBtn(icon('ico-x')+' <span>Назад</span>','verificationHome()',true)}</div>`; return; } if(host) host.innerHTML=`<div class="bot-inline-head">Заявка отправлена</div><div class="bot-inline-copy">Super Verification передал заявку администрации. Статус появится прямо в этом чате и в разделе «Мои заявки».</div><div class="bot-inline-actions">${vBtn(icon('ico-check')+' <span>Мои заявки</span>','showVerificationInlineRequests()')}${vBtn(icon('ico-x')+' <span>Назад</span>','verificationHome()',true)}</div>`; try{ if(window.currentChatId && String(window.currentChatId).startsWith('verification_bot_') && typeof fetchMessages==='function'){ fetchMessages(window.currentChatId, true); } }catch(e){} };
+  window.showSecurityInlineHome=function(){ const host=botWorkspace(); if(!host) return; host.innerHTML=`<div class="bot-inline-head">SuperChat</div><div class="bot-inline-buttons">${vBtn(icon('ico-settings')+' <span>Активные сессии</span>','showActiveSessions()')}${vBtn(icon('ico-clock')+' <span>Обновить</span>','fetchMessages(window.currentChatId,true)',true)}</div>`; scrollBotWorkspace(); };
+  function mountInlineBotUi(){ removeBotMsgMenus(); cleanupBotMenus(); if(currentChatIsVerification()) verificationHome(); else if(currentChatIsSecurity()) showSecurityInlineHome(); else document.getElementById('bot-inline-row')?.remove(); }
+  const oldFetchMessages=window.fetchMessages;
+  if(typeof oldFetchMessages==='function'){
+    window.fetchMessages=async function(chatId, shouldScroll=false, options={}){ const r=await oldFetchMessages(chatId, shouldScroll, options); try{ setTimeout(mountInlineBotUi, 30); }catch(e){} return r; };
+  }
+  const oldRenderChatView2=window.renderChatView;
+  if(typeof oldRenderChatView2==='function'){
+    window.renderChatView=function(args){ oldRenderChatView2(args); try{ setTimeout(mountInlineBotUi, 30); }catch(e){} };
+  }
+  window.mountVerificationBotExperience=function(){};
+  window.renderVerificationBotMenu=verificationHome;
+  window.openVerificationBotPanel=(type)=>openVerificationInlineForm(type||'profile');
+  window.submitVerificationBotInline=()=>submitVerificationInlineReal();
+  window.showMyVerificationRequests=()=>showVerificationInlineRequests();
+})();
+</script>
+
+</body>
+
+<!-- Telegram-style Project Rules Overlay (design matches auth, logic unchanged) -->
+<div id="privacy-overlay" class="privacy-shell" role="dialog" aria-modal="true" aria-label="Правила проекта">
+    <div class="privacy-bg" aria-hidden="true">
+        <div class="privacy-orb privacy-orb--a"></div>
+        <div class="privacy-orb privacy-orb--b"></div>
+        <div class="privacy-orb privacy-orb--c"></div>
+    </div>
+
+    <div class="privacy-card" tabindex="-1">
+        <div class="privacy-head">
+            <div class="privacy-brand">
+                <div class="privacy-mark" aria-hidden="true">S</div>
+                <div style="min-width:0;">
+                    <h2 class="privacy-title">Правила проекта и конфиденциальность</h2>
+                    <p class="privacy-sub">Официальные условия использования сервиса. Пожалуйста, ознакомьтесь и подтвердите согласие, чтобы продолжить.</p>
+                </div>
+            </div>
+
+            <button type="button" class="privacy-close" id="privacy-close-btn" aria-label="Закрыть" title="Закрыть" onclick="closeProjectRules()">✕</button>
+        </div>
+
+        <div class="privacy-badges" aria-hidden="true">
+            <span class="privacy-badge">🛡️ Безопасность</span>
+            <span class="privacy-badge">🔒 Конфиденциальность</span>
+            <span class="privacy-badge">🚫 Антиспам</span>
+            <span class="privacy-badge">⚖️ Правила</span>
+        </div>
+
+        <div class="privacy-scroll" role="document">
+            <div class="privacy-block">
+                <h3 class="privacy-h">1. Конфиденциальность и безопасность</h3>
+                <p class="privacy-p">
+                    Мы уважаем приватность пользователей и используем меры защиты для безопасности данных и стабильной работы сервиса.
+                </p>
+                <ul class="privacy-list">
+                    <li><b>Личные переписки</b> предназначены только для участников чата. Мы не читаем содержимое личных сообщений в обычном режиме работы сервиса.</li>
+                    <li>Передача данных осуществляется по защищённому соединению (например, HTTPS/TLS), а доступ к аккаунтам защищён механизмами авторизации и контроля доступа.</li>
+                    <li>Мы не продаём персональные данные и не передаём их третьим лицам для рекламы.</li>
+                    <li>Для предотвращения злоупотреблений можем обрабатывать <b>технические метаданные</b> (например, время отправки, идентификаторы, IP/устройство) — в объёме, необходимом для безопасности и работы сервиса.</li>
+                </ul>
+            </div>
+
+            <div class="privacy-block">
+                <h3 class="privacy-h">2. Аккаунт и ответственность пользователя</h3>
+                <ul class="privacy-list">
+                    <li>Вы отвечаете за сохранность логина/пароля и действия, совершённые в вашем аккаунте.</li>
+                    <li>Запрещено передавать доступ третьим лицам, а также использовать аккаунт для обхода блокировок или ограничений.</li>
+                    <li>Запрещено выдавать себя за другого человека, организацию или службу поддержки.</li>
+                    <li>Если вы подозреваете компрометацию аккаунта — немедленно смените пароль и обратитесь в поддержку.</li>
+                </ul>
+            </div>
+
+            <div class="privacy-block">
+                <h3 class="privacy-h">3. Запрещённый контент и действия</h3>
+                <p class="privacy-p">В сервисе запрещены любые действия, нарушающие безопасность пользователей и/или закон.</p>
+                <ul class="privacy-list">
+                    <li>Спам, массовые рассылки, навязчивая реклама, накрутки, вредоносные боты.</li>
+                    <li>Мошенничество, фишинг, попытки получить чужие пароли/коды, поддельные “розыгрыши”, финансовые схемы.</li>
+                    <li>Вредоносные файлы/ссылки, вирусы, попытки взлома, DDoS, сканирование уязвимостей.</li>
+                    <li>Порнографический контент, сексуальная эксплуатация, особенно с участием несовершеннолетних.</li>
+                    <li>Призывы к насилию, травля, угрозы, разжигание ненависти и дискриминация по любым признакам.</li>
+                    <li>Публикация персональных данных третьих лиц без их согласия (doxxing).</li>
+                    <li>Контент, связанный с незаконными товарами/услугами или иными противоправными действиями.</li>
+                </ul>
+            </div>
+
+            <div class="privacy-block">
+                <h3 class="privacy-h">4. Общение и поведение</h3>
+                <ul class="privacy-list">
+                    <li>Соблюдайте уважительный тон в публичных чатах и сообществах.</li>
+                    <li>Запрещены оскорбления, преследование, провокации и систематическое нарушение порядка общения.</li>
+                    <li>Администрация может ограничить доступ к публичным функциям при систематических нарушениях.</li>
+                </ul>
+            </div>
+
+            <div class="privacy-block">
+                <h3 class="privacy-h">5. Модерация и меры</h3>
+                <ul class="privacy-list">
+                    <li>Мы можем удалять материалы, ограничивать функциональность или блокировать аккаунты при нарушении правил.</li>
+                    <li>Меры применяются по результатам проверки жалоб и/или автоматических сигналов антиспама.</li>
+                    <li>При необходимости мы можем запросить дополнительные данные для подтверждения владения аккаунтом.</li>
+                </ul>
+            </div>
+
+            <div class="privacy-block">
+                <h3 class="privacy-h">6. Изменения правил</h3>
+                <p class="privacy-p">
+                    Мы можем обновлять правила для улучшения безопасности и работы сервиса. Продолжая использование после обновлений, вы соглашаетесь с новой редакцией.
+                </p>
+            </div>
+
+            <div class="privacy-block" style="margin-bottom:0;">
+                <h3 class="privacy-h">7. Возрастные ограничения</h3>
+                <p class="privacy-p">
+                    Сервис предназначен для пользователей, достигших возраста, разрешённого законодательством вашей страны. Если вы несовершеннолетний — используйте сервис только с согласия законного представителя.
+                </p>
+            </div>
+        </div>
+
+        <div class="privacy-actions">
+            <label class="privacy-check" for="privacy-checkbox">
+                <span class="privacy-check__box">
+                    <input type="checkbox" id="privacy-checkbox" class="privacy-check__input">
+                    <span class="privacy-check__tick" aria-hidden="true">✓</span>
+                </span>
+                <span class="privacy-check__text">
+                    Я принимаю правила проекта и политику конфиденциальности
+                </span>
+            </label>
+
+            <button id="privacy-continue-btn" disabled class="privacy-primary">
+                Продолжить
+            </button>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    (function() {
+        const overlay = document.getElementById('privacy-overlay');
+        const checkbox = document.getElementById('privacy-checkbox');
+        const btn = document.getElementById('privacy-continue-btn');
+        const closeBtn = document.getElementById('privacy-close-btn');
+
+        if (!overlay || !checkbox || !btn) return;
+
+        // Проверяем, принимал ли пользователь условия ранее
+        let accepted = false;
+        try { accepted = localStorage.getItem('privacy_accepted') === 'true'; } catch(e) { accepted = false; }
+
+        if (accepted) {
+            overlay.style.display = 'none';
+            overlay.dataset.mode = 'hidden';
+        } else {
+            overlay.dataset.mode = 'forced';
+        }
+
+        checkbox.addEventListener('change', function() {
+            btn.disabled = !this.checked;
+        });
+
+        // Закрытие доступно только если окно открыто вручную (по ссылке "правила проекта")
+        if (closeBtn) {
+            closeBtn.addEventListener('click', function() {
+                if (overlay.dataset.mode === 'manual') {
+                    try { closeProjectRules && closeProjectRules(); } catch(e) { overlay.style.display = 'none'; }
+                }
+            });
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && overlay.style.display !== 'none' && overlay.dataset.mode === 'manual') {
+                try { closeProjectRules && closeProjectRules(); } catch(err) { overlay.style.display = 'none'; }
+            }
+        });
+
+        btn.addEventListener('click', function() {
+            if (checkbox.checked) {
+                // Плавное скрытие
+                overlay.style.opacity = '0';
+                overlay.style.transition = 'opacity 0.4s ease';
+
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                    overlay.dataset.mode = 'hidden';
+                    // Сохраняем выбор, чтобы окно не появлялось каждый раз
+                    try { localStorage.setItem('privacy_accepted', 'true'); } catch(e) {}
+                }, 400);
+            }
+        });
+    })();
+
+</script>
+
+    <script src="session-keys.js"></script>
+
+</html>
